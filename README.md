@@ -1,0 +1,1 @@
+# artifactory-azure-extension

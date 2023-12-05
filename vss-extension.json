@@ -3,7 +3,7 @@
     "id": "build-release-task",
     "name": "Fabrikam Build and Release Tools",
     "version": "0.0.1",
-    "publisher": "fabrikam",
+    "publisher": "oleg-private-snyk",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
@@ -13,9 +13,6 @@
     "categories": [
         "Azure Pipelines"
     ],
-    "icons": {
-        "default": "images/extension-icon.png"        
-    },
     "files": [
         {
             "path": "buildandreleasetask"

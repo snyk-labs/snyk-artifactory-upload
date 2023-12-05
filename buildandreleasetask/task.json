@@ -1,0 +1,31 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "40614d12-c808-435f-a2ea-181e09503ad4",
+    "name": "snyk-artifactory-azure-upload",
+    "friendlyName": "snyk-artifactory-azure-upload",
+    "description": "Set's properties on artifactory artifacts with result of snky SAST scan",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Snyk",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Echo $(samplestring)",
+    "inputs": [
+        {
+            "name": "scanresultslocation",
+            "type": "string",
+            "label": "Scan Results Location",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The location of Snyk scan results to be formatted for Artifactory"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+    }

@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
-    "id": "build-release-task",
-    "name": "Fabrikam Build and Release Tools",
+    "id": "artifactory-upload",
+    "name": "Snyk Artifactory Upload",
     "version": "0.0.1",
     "publisher": "oleg-private-snyk",
     "targets": [
@@ -9,7 +9,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
-    "description": "Tools for building/releasing with Fabrikam. Includes one build/release task.",
+    "description": "Set's properties on artifactory artifacts with result of snky SAST scan",
     "categories": [
         "Azure Pipelines"
     ],

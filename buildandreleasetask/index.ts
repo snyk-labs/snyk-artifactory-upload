@@ -1,26 +1,17 @@
 import tl = require('azure-pipelines-task-lib/task');
 import fs from 'fs'; // Import the Node.js file system module
-
-
-
-
-// Function to read a file and print its contents
-function readFileContents(filePath: string): void {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading the file:', err);
-      return;
-    }
-    console.log('File contents:');
-    console.log(data); // Print the contents of the file
-  });
-}
-
+import * as Utils from './helpers'
+import * as types from './types'
 
 const fileLocation: string | undefined = tl.getInput('scanresultslocation', true);
 
-if (fileLocation) {
-  readFileContents(fileLocation); // Only call function if fileLocation is defined
-} else {
-  console.error('File location is undefined or empty.');
+async function run() {
+    if (fileLocation) {
+        let codeResults = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
+        console.log(Utils.processCode(codeResults))
+      } else {
+        console.error('File location is undefined or empty.');
+      }
 }
+
+run()

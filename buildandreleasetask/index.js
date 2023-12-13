@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const tl = require("azure-pipelines-task-lib/task");
 const Utils = __importStar(require("./helpers"));
+const Artifactory = require('./artifactory-api-helpers');
 const fileLocation = tl.getInput('scanresultslocation', true);
 async function run() {
     if (fileLocation) {
@@ -34,5 +35,7 @@ async function run() {
     else {
         console.error('File location is undefined or empty.');
     }
+    console.log("testupdate");
+    Artifactory.setProperties("balerg");
 }
 run();

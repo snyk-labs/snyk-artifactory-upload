@@ -9,7 +9,7 @@
     "author": "Snyk",
     "version": {
         "Major": 0,
-        "Minor": 1,
+        "Minor": 13,
         "Patch": 0
     },
     "instanceNameFormat": "Echo $(samplestring)",
@@ -21,10 +21,17 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "The location of Snyk scan results to be formatted for Artifactory"
+        },{
+            "name": "artifactoryServiceConnection",
+            "type": "connectedService:jfrogArtifactoryService",
+            "label": "Artifactory Service Connection",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Select the Artifactory service connection."
         }
     ],
     "execution": {
-        "Node": {
+        "Node16": {
             "target": "index.js"
         }
     }

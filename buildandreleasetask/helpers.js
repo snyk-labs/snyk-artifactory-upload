@@ -42,7 +42,7 @@ function processCode(codeOutput) {
                 const results = run['results'];
                 //filter through each issue
                 for (let issueIndex = 0; issueIndex < results.length; issueIndex++) {
-                    scanProperties.snyk_sast_scan_status = "Complete";
+                    scanProperties.snyk_sast_scan_status = "complete";
                     //process each issue and amend the codeOutput object
                     const issue = results[issueIndex];
                     if (issue.level == 'info' || issue.level == 'note') {

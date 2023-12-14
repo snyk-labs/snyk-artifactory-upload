@@ -1,5 +1,6 @@
 import fs from 'fs'; // Import the Node.js file system module
 import * as types from './types'
+import tl = require('azure-pipelines-task-lib/task');
 
 export async function readFileContents(filePath: string): Promise<object | null> {
   return new Promise((resolve, reject) => {
@@ -75,4 +76,31 @@ export function processCode(codeOutput: any): types.CodeProperties {
 
     return scanProperties
   }
+
+
+  // Function to add pipeline info to an existing object
+export function addPipelineInfo(existingObj: any): any {
+    try {
+      // Retrieve pipeline variables
+      const projectName = tl.getVariable('System.TeamProject');
+      const repoName = tl.getVariable('Build.Repository.Name');
+      const sourceBranch = tl.getVariable('Build.SourceBranch');
+  
+      // Add pipeline info to the existing object
+      const newObj = {
+        ...existingObj, // Spread existing object
+        ado_project_name: projectName,
+        code_repository_name: repoName,
+        code_branch_name: sourceBranch
+      };
+  
+      return newObj;
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle errors here or return the original object if an error occurs
+      return existingObj;
+    }
+  }
+  
+
   

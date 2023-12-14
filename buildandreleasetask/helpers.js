@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processCode = exports.readFileContents = void 0;
+exports.addPipelineInfo = exports.processCode = exports.readFileContents = void 0;
 const fs_1 = __importDefault(require("fs")); // Import the Node.js file system module
+const tl = require("azure-pipelines-task-lib/task");
 async function readFileContents(filePath) {
     return new Promise((resolve, reject) => {
         fs_1.default.readFile(filePath, 'utf8', (err, data) => {
@@ -73,3 +74,26 @@ function processCode(codeOutput) {
     return scanProperties;
 }
 exports.processCode = processCode;
+// Function to add pipeline info to an existing object
+function addPipelineInfo(existingObj) {
+    try {
+        // Retrieve pipeline variables
+        const projectName = tl.getVariable('System.TeamProject');
+        const repoName = tl.getVariable('Build.Repository.Name');
+        const sourceBranch = tl.getVariable('Build.SourceBranch');
+        // Add pipeline info to the existing object
+        const newObj = {
+            ...existingObj,
+            projectName: projectName,
+            repoName: repoName,
+            sourceBranch: sourceBranch
+        };
+        return newObj;
+    }
+    catch (error) {
+        console.error('Error:', error);
+        // Handle errors here or return the original object if an error occurs
+        return existingObj;
+    }
+}
+exports.addPipelineInfo = addPipelineInfo;

@@ -8,8 +8,8 @@
     "category": "Utility",
     "author": "Snyk",
     "version": {
-        "Major": 0,
-        "Minor": 13,
+        "Major": 3,
+        "Minor": 4,
         "Patch": 0
     },
     "instanceNameFormat": "Echo $(samplestring)",
@@ -28,6 +28,13 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "Select the Artifactory service connection."
+        },{
+            "name": "artifactUrl",
+            "type": "string",
+            "label": "The URL of the artifact to set properties on",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The URL of the artifact to set properties on"
         }
     ],
     "execution": {

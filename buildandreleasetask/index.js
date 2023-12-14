@@ -28,14 +28,18 @@ const Utils = __importStar(require("./helpers"));
 const Artifactory = require('./artifactory-api-helpers');
 const fileLocation = tl.getInput('scanresultslocation', true);
 async function run() {
+    let scanData = {};
+    //if location of json code file is passed then proccess the data
     if (fileLocation) {
-        let codeResults = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
-        console.log(Utils.processCode(codeResults));
+        let codeJson = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
+        scanData = Utils.processCode(codeJson);
     }
     else {
         console.error('File location is undefined or empty.');
     }
-    console.log("testupdate");
+    //add build details to data
+    scanData = Utils.addPipelineInfo(scanData);
+    console.log(scanData);
     Artifactory.setProperties("balerg");
 }
 run();

@@ -84,9 +84,9 @@ function addPipelineInfo(existingObj) {
         // Add pipeline info to the existing object
         const newObj = {
             ...existingObj,
-            projectName: projectName,
-            repoName: repoName,
-            sourceBranch: sourceBranch
+            ado_project_name: projectName,
+            code_repository_name: repoName,
+            code_branch_name: sourceBranch
         };
         return newObj;
     }

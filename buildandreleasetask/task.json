@@ -9,8 +9,8 @@
     "author": "Snyk",
     "version": {
         "Major": 3,
-        "Minor": 4,
-        "Patch": 0
+        "Minor": 8,
+        "Patch": 11
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [

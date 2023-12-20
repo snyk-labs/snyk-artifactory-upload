@@ -1,6 +1,33 @@
 import fs from 'fs'; // Import the Node.js file system module
 import * as types from './types'
 import tl = require('azure-pipelines-task-lib/task');
+import path = require('path');
+
+
+export function findReportFile(): string | null {
+  const givenDate = new Date()
+  const directory : any = tl.getVariable('Agent.TempDirectory');
+  const filesInDirectory = fs.readdirSync(directory);
+  
+  for (const file of filesInDirectory) {
+    if (file.startsWith('report-') && file.endsWith('.json')) {
+      const fileDateStr = file.replace('report-', '').replace('.json', '');
+      const [year, month, day, hours, minutes, seconds] = fileDateStr.split(/[-T:]/);
+      const fileDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), Number(seconds));
+      console.log("file date " + fileDate + "current date " + givenDate)
+      if (!isNaN(fileDate.getTime())) {
+        const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
+        const differenceInMilliseconds = Math.abs(givenDate.getTime() - fileDate.getTime());
+
+        if (differenceInMilliseconds <= tenMinutesInMilliseconds) {
+          return path.join(directory, file); // File found and within 10 minutes of the given date
+        }
+      }
+    }
+  }
+
+  return null; // No suitable file found
+}
 
 export async function readFileContents(filePath: string): Promise<object | null> {
   return new Promise((resolve, reject) => {
@@ -83,8 +110,6 @@ export function processCode(codeOutput: any): types.CodeProperties {
 
     return scanProperties
   }
-
-
   // Function to add pipeline info to an existing object
 export function addPipelineInfo(existingObj: any): any {
     try {
@@ -108,6 +133,8 @@ export function addPipelineInfo(existingObj: any): any {
       return existingObj;
     }
   }
+
+
   
 
   

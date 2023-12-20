@@ -28,8 +28,10 @@ const Utils = __importStar(require("./helpers"));
 const Artifactory = require('./artifactory-api-helpers');
 const fileLocation = tl.getInput('scanresultslocation', true);
 async function run() {
+    let fileLocation = Utils.findReportFile();
+    let codeJson = {};
     let scanData = {};
-    //if location of json code file is passed then proccess the data
+    // if location of json code file is passed then proccess the data
     if (fileLocation) {
         let codeJson = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
         scanData = Utils.processCode(codeJson);

@@ -35,16 +35,16 @@ function setProperties(properties) {
     })
         .then((response) => {
         // Handle successful response
-        console.log('Response:', response.data);
+        // console.log('Response:', response.data);
     })
         .catch((error) => {
         // Handle error
         console.error('Error occurred:', error);
     });
-    console.log(properties);
-    console.log(Object.keys(properties));
+    // console.log(properties)
+    // console.log(Object.keys(properties))
     Object.keys(properties).forEach((prop) => {
-        console.log(url + "?properties=" + prop + "=" + properties[prop]);
+        // console.log(url + "?properties=" + prop + "=" + properties[prop])
     });
 }
 exports.setProperties = setProperties;

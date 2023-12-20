@@ -33,7 +33,8 @@ function processCode(codeOutput) {
         snyk_sast_highest_severity_level: 'None',
         snyk_sast_high_severity_count: 0,
         snyk_sast_medium_severity_count: 0,
-        snyk_sast_low_severity_count: 0
+        snyk_sast_low_severity_count: 0,
+        snyk_sast_project_link: 'None'
     };
     if (codeOutput && Array.isArray(codeOutput['runs'])) {
         const runs = codeOutput['runs'];
@@ -67,6 +68,12 @@ function processCode(codeOutput) {
                         }
                         scanProperties.snyk_sast_findings_present = true;
                     }
+                }
+                //add report data
+                console.log(typeof run?.properties?.uploadResult?.reportUrl);
+                console.log(run.properties.uploadResult.reportUrl);
+                if (typeof run?.properties?.uploadResult?.reportUrl === 'string') {
+                    scanProperties.snyk_sast_project_link = run.properties.uploadResult.reportUrl;
                 }
             }
         }

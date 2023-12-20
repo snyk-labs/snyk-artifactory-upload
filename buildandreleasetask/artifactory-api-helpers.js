@@ -24,15 +24,13 @@ function setProperties(properties) {
     }
     const baseUrl = tl.getEndpointUrl(serviceConnectionId, false);
     const artifactUrl = tl.getInput('artifactUrl', true);
-    const url = `${baseUrl}/${artifactUrl}`; // Construct the complete URL
-    console.log('Full URL: ' + url);
-    const testURL = 'http://oshprengel.jfrog.io/artifactory/api/storage/docker-trial';
+    const url = `${baseUrl}/api/storage/${artifactUrl}`; // Construct the complete URL
     const headers = {
         Authorization: `${authType} ${authToken}`,
         'Content-Type': 'application/json', // Set content type based on your requirements
     };
     axios_1.default
-        .get(testURL, {
+        .get(url, {
         headers: headers, // Pass headers as part of the request config
     })
         .then((response) => {
@@ -43,17 +41,22 @@ function setProperties(properties) {
         // Handle error
         console.error('Error occurred:', error);
     });
+    console.log(properties);
+    console.log(Object.keys(properties));
+    Object.keys(properties).forEach((prop) => {
+        console.log(url + "?properties=" + prop + "=" + properties[prop]);
+    });
 }
 exports.setProperties = setProperties;
-// for(let prop in Object.keys(properties)){
-//   axios.put(url + "?properties=" + prop + "=" + properties[prop], { headers })
-//   .then(response => {
-//     console.log('Response:', response.data);
-//     // Handle the response here
-//   })
-//   .catch(error => {
-//     console.error('Error:', error);
-//     // Handle errors here
-//   });
+// axios.put(url + "?properties=" + prop + "=" + properties[prop], { headers })
+// .then(response => {
+//   console.log('Response:', response.data);
+//   // Handle the response here
+// })
+// .catch(error => {
+//   console.error('Error:', error);
+//   // Handle errors here
+// });
+//     }
 // }
 // const url = 'http://oshprengel.jfrog.io/artifactory/api/storage/docker-trial';

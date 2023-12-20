@@ -40,6 +40,6 @@ async function run() {
     //add build details to data
     scanData = Utils.addPipelineInfo(scanData);
     console.log(scanData);
-    Artifactory.setProperties("balerg");
+    Artifactory.setProperties(scanData);
 }
 run();

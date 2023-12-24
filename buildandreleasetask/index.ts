@@ -4,7 +4,7 @@ import * as Utils from './helpers'
 import * as types from './types'
 const Artifactory = require('./artifactory-api-helpers');
 
-const fileLocation: string | undefined = tl.getInput('scanresultslocation', true);
+// const fileLocation: string | undefined = tl.getInput('scanresultslocation', true);
 
 async function run() {
   let fileLocation = Utils.findReportFile()

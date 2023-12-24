@@ -23,10 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tl = require("azure-pipelines-task-lib/task");
 const Utils = __importStar(require("./helpers"));
 const Artifactory = require('./artifactory-api-helpers');
-const fileLocation = tl.getInput('scanresultslocation', true);
+// const fileLocation: string | undefined = tl.getInput('scanresultslocation', true);
 async function run() {
     let fileLocation = Utils.findReportFile();
     let codeJson = {};

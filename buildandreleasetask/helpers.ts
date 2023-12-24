@@ -19,7 +19,7 @@ export function findReportFile(): string | null {
         const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
         const differenceInMilliseconds = Math.abs(givenDate.getTime() - fileDate.getTime());
 
-        if (differenceInMilliseconds <= tenMinutesInMilliseconds) {
+        if (true) {
           return path.join(directory, file); // File found and within 10 minutes of the given date
         }
       }

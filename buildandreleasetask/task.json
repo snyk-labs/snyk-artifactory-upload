@@ -8,20 +8,12 @@
     "category": "Utility",
     "author": "Snyk",
     "version": {
-        "Major": 3,
-        "Minor": 8,
-        "Patch": 24
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 2
     },
     "instanceNameFormat": "Echo $(samplestring)",
-    "inputs": [
-        {
-            "name": "scanresultslocation",
-            "type": "string",
-            "label": "Scan Results Location",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "The location of Snyk scan results to be formatted for Artifactory"
-        },{
+    "inputs": [{
             "name": "artifactoryServiceConnection",
             "type": "connectedService:jfrogArtifactoryService",
             "label": "Artifactory Service Connection",

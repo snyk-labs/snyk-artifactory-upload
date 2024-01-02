@@ -98,8 +98,6 @@ export function processCode(codeOutput: any): types.CodeProperties {
             }
           }
           //add report data
-          console.log(typeof run?.properties?.uploadResult?.reportUrl)
-          console.log(run.properties.uploadResult.reportUrl)
           if (typeof run?.properties?.uploadResult?.reportUrl === 'string'){
             scanProperties.snyk_sast_project_link = run.properties.uploadResult.reportUrl
           }

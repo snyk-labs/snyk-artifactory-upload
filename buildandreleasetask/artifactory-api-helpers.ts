@@ -4,6 +4,8 @@ import axios from 'axios';
 export function setProperties(properties: any): void {
   // get username/password details from service connection
   const serviceConnectionId: any = tl.getInput('artifactoryServiceConnection', true);
+  console.log("endpoint is " + serviceConnectionId)
+  console.log("type is " + typeof serviceConnectionId)
   const auth = tl.getEndpointAuthorization(serviceConnectionId, false);
   let authType: any = tl.getEndpointAuthorizationScheme(serviceConnectionId, false);
   let authToken: any = '';
@@ -20,12 +22,14 @@ export function setProperties(properties: any): void {
 
   const baseUrl = tl.getEndpointUrl(serviceConnectionId, false);
   const artifactUrl: any = tl.getInput('artifactUrl', true);
-  const url = `${baseUrl}/api/storage/${artifactUrl}`; // Construct the complete URL
+  const url = `${baseUrl}artifactory/api/storage/${artifactUrl}`; // Construct the complete URL
 
   const headers = {
     Authorization: `${authType} ${authToken}`,
     'Content-Type': 'application/json', // Set content type based on your requirements
   };
+
+
 
   axios
     .get(url, {
@@ -33,32 +37,31 @@ export function setProperties(properties: any): void {
     })
     .then((response) => {
       // Handle successful response
-      // console.log('Response:', response.data);
+      console.log('Response from get URL:', response.data);
     })
     .catch((error) => {
       // Handle error
-      console.error('Error occurred:', error);
+      console.error('Error get URL:', error);
+      process.exit()
     });
-    // console.log(properties)
-    // console.log(Object.keys(properties))
     Object.keys(properties).forEach((prop) =>{
-      // console.log(url + "?properties=" + prop + "=" + properties[prop])
-    })
-  }
-
-      // axios.put(url + "?properties=" + prop + "=" + properties[prop], { headers })
-      // .then(response => {
-      //   console.log('Response:', response.data);
-      //   // Handle the response here
-      // })
-      // .catch(error => {
-      //   console.error('Error:', error);
-      //   // Handle errors here
-      // });
-//     }
-// }
+      const queryParams = {
+        "properties": [prop] + '=' +properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
+      };
+      axios.put(url, null, {
+        params: queryParams,
+        headers: headers,
+      })
+        .then(response => {
+          console.log('Response from put url:', response.data);
+          // Handle the response here
+        })
+        .catch(error => {
+          console.log('Error from put URL data: response', error.response.data)
 
 
-
-
-// const url = 'http://oshprengel.jfrog.io/artifactory/api/storage/docker-trial';
+          // Handle errors here
+          process.exit(1); // Exiting with a non-zero code indicating an error
+        });
+      })
+    }

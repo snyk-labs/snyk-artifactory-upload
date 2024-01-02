@@ -3,19 +3,19 @@
     "id": "40614d12-c808-435f-a2ea-181e09503ad4",
     "name": "snyk-artifactory-azure-upload",
     "friendlyName": "snyk-artifactory-azure-upload",
-    "description": "Set's properties on artifactory artifacts with result of snky SAST scan",
+    "description": "Set's properties on artifactory artifacts with result of snyk SAST scan",
     "helpMarkDown": "",
     "category": "Utility",
     "author": "Snyk",
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 2
+        "Patch": 22
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [{
             "name": "artifactoryServiceConnection",
-            "type": "connectedService:jfrogArtifactoryService",
+            "type": "connectedService:jfrogPlatformService",
             "label": "Artifactory Service Connection",
             "defaultValue": "",
             "required": true,

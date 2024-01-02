@@ -9,7 +9,7 @@ pat="hm2fw5aq5snbzmuujlautt3usiajkhfkowu2udqwe3sqb6j65woq" # You need a Personal
 token="$(echo -n ":$pat" | base64)"
 
 # Get service connections
-url="https://dev.azure.com/$organization/$project/_apis/serviceendpoint/endpoints/c17194fc-949e-4734-adcc-4dd4058e2b05?api-version=6.0-preview.4"
+url="https://dev.azure.com/$organization/$project/_apis/serviceendpoint/endpoints/14fa6044-2751-4491-b929-79ab9cc999f6?api-version=6.0-preview.4"
 
 # Make REST API call to get service connections
 response=$(curl -s -H "Authorization: Basic $token" -X GET $url)

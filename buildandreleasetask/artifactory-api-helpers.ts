@@ -4,12 +4,9 @@ import axios from 'axios';
 export function setProperties(properties: any): void {
   // get username/password details from service connection
   const serviceConnectionId: any = tl.getInput('artifactoryServiceConnection', true);
-  console.log("endpoint is " + serviceConnectionId)
-  console.log("type is " + typeof serviceConnectionId)
   const auth = tl.getEndpointAuthorization(serviceConnectionId, false);
   let authType: any = tl.getEndpointAuthorizationScheme(serviceConnectionId, false);
   let authToken: any = '';
-
   if (authType == 'UsernamePassword') {
     const username = auth?.parameters['username'];
     const password = auth?.parameters['password'];
@@ -20,19 +17,26 @@ export function setProperties(properties: any): void {
     authType = 'Bearer';
   }
 
-  const baseUrl = tl.getEndpointUrl(serviceConnectionId, false);
-  const artifactUrl: any = tl.getInput('artifactUrl', true);
-  const url = `${baseUrl}artifactory/api/storage/${artifactUrl}`; // Construct the complete URL
+  //Retrieve artifact URLs
+  const baseUrl = tl.getEndpointUrl(serviceConnectionId, true);
+  const artifactUrls: any = tl.getInput('artifactUrls', true)?.split(',');
+  const delimiter: any = tl.getInput('delimiter', false) || ','
 
+  console.log(artifactUrls)
+
+  //set API headers
   const headers = {
     Authorization: `${authType} ${authToken}`,
     'Content-Type': 'application/json', // Set content type based on your requirements
   };
 
+  //add properties to each artifact
+  for(let artifactUrl of artifactUrls){
 
 
-  axios
-    .get(url, {
+  artifactUrl = `${baseUrl}artifactory/api/storage/${artifactUrl}`; // Construct the complete URL
+    axios
+    .get(artifactUrl, {
       headers: headers, // Pass headers as part of the request config
     })
     .then((response) => {
@@ -44,24 +48,28 @@ export function setProperties(properties: any): void {
       console.error('Error get URL:', error);
       process.exit()
     });
-    Object.keys(properties).forEach((prop) =>{
-      const queryParams = {
-        "properties": [prop] + '=' +properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
-      };
-      axios.put(url, null, {
-        params: queryParams,
-        headers: headers,
-      })
-        .then(response => {
-          console.log('Response from put url:', response.data);
-          // Handle the response here
-        })
-        .catch(error => {
-          console.log('Error from put URL data: response', error.response.data)
 
 
-          // Handle errors here
-          process.exit(1); // Exiting with a non-zero code indicating an error
-        });
-      })
-    }
+
+    // Object.keys(properties).forEach((prop) =>{
+    //   const queryParams = {
+    //     "properties": [prop] + '=' +properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
+    //   };
+    //   axios.put(artifactUrl, null, {
+    //     params: queryParams,
+    //     headers: headers,
+    //   })
+    //     .then(response => {
+    //       console.log('Response from put url:', response.data);
+    //       // Handle the response here
+    //     })
+    //     .catch(error => {
+    //       console.log('Error from put URL data: response', error.response.data)
+
+
+    //       // Handle errors here
+    //       process.exit(1); // Exiting with a non-zero code indicating an error
+    //     });
+    //   })
+  }
+}

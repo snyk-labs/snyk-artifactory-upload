@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 22
+        "Patch": 25
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [{
@@ -21,12 +21,20 @@
             "required": true,
             "helpMarkDown": "Select the Artifactory service connection."
         },{
-            "name": "artifactUrl",
+            "name": "artifactUrls",
             "type": "string",
-            "label": "The URL of the artifact to set properties on",
+            "label": "The URLs of the artifacts to set properties on",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "The URL of the artifact to set properties on"
+            "helpMarkDown": "A list of artifact url's (excluding base URL) to set properties on. i.e (someartifacts/location,anotherartifacts/location)"
+        },
+        {
+            "name": "delimiter",
+            "type": "string",
+            "label": "A char to split the artifact urls with",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "A char to split the artifact urls with"
         }
     ],
     "execution": {

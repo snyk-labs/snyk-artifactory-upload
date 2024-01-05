@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "artifactory-upload",
     "name": "Snyk Artifactory Upload",
-    "version": "0.0.993",
+    "version": "0.0.998",
     "publisher": "oleg-private-snyk",
     "targets": [
         {

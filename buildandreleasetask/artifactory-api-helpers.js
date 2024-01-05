@@ -22,50 +22,36 @@ function setProperties(properties) {
         authToken = auth?.parameters['apitoken'];
         authType = 'Bearer';
     }
-    //Retrieve artifact URLs
     const baseUrl = tl.getEndpointUrl(serviceConnectionId, true);
-    const artifactUrls = tl.getInput('artifactUrls', false)?.split(',');
+    //Retrieve artifact URLs
     const delimiter = tl.getInput('delimiter', false) || ',';
-    console.log(artifactUrls);
+    const artifactUrls = tl.getInput('artifactUrls', true)?.split(delimiter);
     //set API headers
     const headers = {
         Authorization: `${authType} ${authToken}`,
         'Content-Type': 'application/json', // Set content type based on your requirements
     };
     //add properties to each artifact
-    for (let artifactUrl of artifactUrls) {
-        artifactUrl = `${baseUrl}artifactory/api/storage/${artifactUrl}`; // Construct the complete URL
-        axios_1.default
-            .get(artifactUrl, {
-            headers: headers, // Pass headers as part of the request config
-        })
-            .then((response) => {
-            // Handle successful response
-            console.log('Response from get URL:', response.data);
-        })
-            .catch((error) => {
-            // Handle error
-            console.error('Error get URL:', error);
-            process.exit();
+    for (let artifactUrlShort of artifactUrls) {
+        const artifactUrl = `${baseUrl}artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
+        Object.keys(properties).forEach((prop) => {
+            const queryParams = {
+                "properties": [prop] + '=12' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
+            };
+            axios_1.default.put(artifactUrl, null, {
+                params: queryParams,
+                headers: headers,
+            })
+                .then(response => {
+                // Handle the response here
+            })
+                .catch(error => {
+                console.log('Error while attempting to add property to artifact: response', error.response.data);
+                // Handle errors here
+                process.exit(1); // Exiting with a non-zero code indicating an error
+            });
         });
-        // Object.keys(properties).forEach((prop) =>{
-        //   const queryParams = {
-        //     "properties": [prop] + '=' +properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
-        //   };
-        //   axios.put(artifactUrl, null, {
-        //     params: queryParams,
-        //     headers: headers,
-        //   })
-        //     .then(response => {
-        //       console.log('Response from put url:', response.data);
-        //       // Handle the response here
-        //     })
-        //     .catch(error => {
-        //       console.log('Error from put URL data: response', error.response.data)
-        //       // Handle errors here
-        //       process.exit(1); // Exiting with a non-zero code indicating an error
-        //     });
-        //   })
+        console.log("Sucessfully added properties to artifact: " + artifactUrlShort);
     }
 }
 exports.setProperties = setProperties;

@@ -25,21 +25,46 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Utils = __importStar(require("./helpers"));
 const Artifactory = require('./artifactory-api-helpers');
-// const fileLocation: string | undefined = tl.getInput('scanresultslocation', true);
 async function run() {
-    let fileLocation = Utils.findReportFile();
-    let codeJson = {};
-    let scanData = {};
+    //get snyk report file
+    let fileLocation = "";
+    try {
+        fileLocation = Utils.findReportFile();
+    }
+    catch (err) {
+        console.log("Error retrieving Snyk report file: " + err);
+        process.exit(1);
+    }
     // if location of json code file is passed then proccess the data
+    let scanData = {};
     if (fileLocation) {
-        let codeJson = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
-        scanData = Utils.processCode(codeJson);
+        try {
+            let codeJson = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
+            scanData = Utils.processCode(codeJson);
+        }
+        catch (err) {
+            console.log("Error processing code results: " + err);
+        }
     }
     else {
         console.error('File location is undefined or empty.');
+        process.exit(1);
     }
     //add build details to data
-    scanData = Utils.addPipelineInfo(scanData);
-    Artifactory.setProperties(scanData);
+    try {
+        scanData = Utils.addPipelineInfo(scanData);
+        console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + scanData);
+    }
+    catch (err) {
+        console.log("Error processing pipeline build data: " + err);
+        process.exit(1);
+    }
+    //set properties in artifactory
+    try {
+        Artifactory.setProperties(scanData);
+    }
+    catch (err) {
+        console.log("Error setting properties on artifact: " + err);
+    }
 }
 run();

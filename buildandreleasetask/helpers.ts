@@ -14,13 +14,14 @@ export function findReportFile(): string | null {
       const fileDateStr = file.replace('report-', '').replace('.json', '');
       const [year, month, day, hours, minutes, seconds] = fileDateStr.split(/[-T:]/);
       const fileDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), Number(seconds));
-      console.log("file date " + fileDate + "current date " + givenDate)
       if (!isNaN(fileDate.getTime())) {
         const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
         const differenceInMilliseconds = Math.abs(givenDate.getTime() - fileDate.getTime());
 
         if (true) {
-          return path.join(directory, file); // File found and within 10 minutes of the given date
+          const filePath = path.join(directory, file)
+          console.log("Snyk report file found: " + filePath)
+          return filePath // File found and within 10 minutes of the given date
         }
       }
     }

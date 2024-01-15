@@ -32,7 +32,7 @@ async function run() {
     //add build details to data
     try{
       scanData = Utils.addPipelineInfo(scanData)
-      console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + scanData)
+      console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + JSON.stringify(scanData))
     }catch (err){
       console.log("Error processing pipeline build data: " + err)
       process.exit(1)

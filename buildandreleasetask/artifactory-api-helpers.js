@@ -7,25 +7,26 @@ exports.setProperties = void 0;
 const tl = require("azure-pipelines-task-lib/task");
 const axios_1 = __importDefault(require("axios"));
 function setProperties(properties) {
+    var _a;
     // get username/password details from service connection
     const serviceConnectionId = tl.getInput('artifactoryServiceConnection', true);
     const auth = tl.getEndpointAuthorization(serviceConnectionId, false);
     let authType = tl.getEndpointAuthorizationScheme(serviceConnectionId, false);
     let authToken = '';
     if (authType == 'UsernamePassword') {
-        const username = auth?.parameters['username'];
-        const password = auth?.parameters['password'];
+        const username = auth === null || auth === void 0 ? void 0 : auth.parameters['username'];
+        const password = auth === null || auth === void 0 ? void 0 : auth.parameters['password'];
         authToken = Buffer.from(`${username}:${password}`).toString('base64');
         authType = 'Basic';
     }
     else if (authType == 'Token') {
-        authToken = auth?.parameters['apitoken'];
+        authToken = auth === null || auth === void 0 ? void 0 : auth.parameters['apitoken'];
         authType = 'Bearer';
     }
     const baseUrl = tl.getEndpointUrl(serviceConnectionId, true);
     //Retrieve artifact URLs
     const delimiter = tl.getInput('delimiter', false) || ',';
-    const artifactUrls = tl.getInput('artifactUrls', true)?.split(delimiter);
+    const artifactUrls = (_a = tl.getInput('artifactUrls', true)) === null || _a === void 0 ? void 0 : _a.split(delimiter);
     //set API headers
     const headers = {
         Authorization: `${authType} ${authToken}`,

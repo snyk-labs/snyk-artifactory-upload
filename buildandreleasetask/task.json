@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 28
+        "Patch": 32
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [{
@@ -38,7 +38,7 @@
         }
     ],
     "execution": {
-        "Node16": {
+        "Node10": {
             "target": "index.js"
         }
     }

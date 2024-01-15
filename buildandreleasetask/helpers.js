@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -30,27 +39,30 @@ function findReportFile() {
     return null; // No suitable file found
 }
 exports.findReportFile = findReportFile;
-async function readFileContents(filePath) {
-    return new Promise((resolve, reject) => {
-        fs_1.default.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-                console.error('Error reading the file:', err);
-                reject(err); // Reject the promise if there's an error
-                return;
-            }
-            try {
-                const jsonObject = JSON.parse(data); // Parse the data as JSON
-                resolve(jsonObject); // Resolve the promise with the parsed JSON object
-            }
-            catch (parseError) {
-                console.error('Error parsing JSON:', parseError);
-                resolve(null); // Resolve with null if parsing fails
-            }
+function readFileContents(filePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
+            fs_1.default.readFile(filePath, 'utf8', (err, data) => {
+                if (err) {
+                    console.error('Error reading the file:', err);
+                    reject(err); // Reject the promise if there's an error
+                    return;
+                }
+                try {
+                    const jsonObject = JSON.parse(data); // Parse the data as JSON
+                    resolve(jsonObject); // Resolve the promise with the parsed JSON object
+                }
+                catch (parseError) {
+                    console.error('Error parsing JSON:', parseError);
+                    resolve(null); // Resolve with null if parsing fails
+                }
+            });
         });
     });
 }
 exports.readFileContents = readFileContents;
 function processCode(codeOutput) {
+    var _a, _b;
     let scanProperties = {
         snyk_sast_scan_status: 'Error',
         snyk_sast_findings_present: false,
@@ -94,7 +106,7 @@ function processCode(codeOutput) {
                     }
                 }
                 //add report data
-                if (typeof run?.properties?.uploadResult?.reportUrl === 'string') {
+                if (typeof ((_b = (_a = run === null || run === void 0 ? void 0 : run.properties) === null || _a === void 0 ? void 0 : _a.uploadResult) === null || _b === void 0 ? void 0 : _b.reportUrl) === 'string') {
                     scanProperties.snyk_sast_project_link = run.properties.uploadResult.reportUrl;
                 }
             }
@@ -111,12 +123,7 @@ function addPipelineInfo(existingObj) {
         const repoName = tl.getVariable('Build.Repository.Name');
         const sourceBranch = tl.getVariable('Build.SourceBranch');
         // Add pipeline info to the existing object
-        const newObj = {
-            ...existingObj,
-            ado_project_name: projectName,
-            code_repository_name: repoName,
-            code_branch_name: sourceBranch
-        };
+        const newObj = Object.assign(Object.assign({}, existingObj), { ado_project_name: projectName, code_repository_name: repoName, code_branch_name: sourceBranch });
         return newObj;
     }
     catch (error) {

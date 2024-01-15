@@ -22,49 +22,60 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Utils = __importStar(require("./helpers"));
 const Artifactory = require('./artifactory-api-helpers');
-async function run() {
-    //get snyk report file
-    let fileLocation = "";
-    try {
-        fileLocation = Utils.findReportFile();
-    }
-    catch (err) {
-        console.log("Error retrieving Snyk report file: " + err);
-        process.exit(1);
-    }
-    // if location of json code file is passed then proccess the data
-    let scanData = {};
-    if (fileLocation) {
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        //get snyk report file
+        let fileLocation = "";
         try {
-            let codeJson = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
-            scanData = Utils.processCode(codeJson);
+            fileLocation = Utils.findReportFile();
         }
         catch (err) {
-            console.log("Error processing code results: " + err);
+            console.log("Error retrieving Snyk report file: " + err);
+            process.exit(1);
         }
-    }
-    else {
-        console.error('File location is undefined or empty.');
-        process.exit(1);
-    }
-    //add build details to data
-    try {
-        scanData = Utils.addPipelineInfo(scanData);
-        console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + scanData);
-    }
-    catch (err) {
-        console.log("Error processing pipeline build data: " + err);
-        process.exit(1);
-    }
-    //set properties in artifactory
-    try {
-        Artifactory.setProperties(scanData);
-    }
-    catch (err) {
-        console.log("Error setting properties on artifact: " + err);
-    }
+        // if location of json code file is passed then proccess the data
+        let scanData = {};
+        if (fileLocation) {
+            try {
+                let codeJson = yield Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
+                scanData = Utils.processCode(codeJson);
+            }
+            catch (err) {
+                console.log("Error processing code results: " + err);
+            }
+        }
+        else {
+            console.error('File location is undefined or empty.');
+            process.exit(1);
+        }
+        //add build details to data
+        try {
+            scanData = Utils.addPipelineInfo(scanData);
+            console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + scanData);
+        }
+        catch (err) {
+            console.log("Error processing pipeline build data: " + err);
+            process.exit(1);
+        }
+        //set properties in artifactory
+        try {
+            Artifactory.setProperties(scanData);
+        }
+        catch (err) {
+            console.log("Error setting properties on artifact: " + err);
+        }
+    });
 }
 run();

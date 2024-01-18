@@ -10,23 +10,47 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 32
+        "Patch": 39
     },
     "instanceNameFormat": "Echo $(samplestring)",
-    "inputs": [{
+    "inputs": [
+        {
+            "name": "Stage",
+            "type": "pickList",
+            "label": "Stage",
+            "helpMarkDown": "Stage determines the function of the extension, stage 1 (Takes Snyk JSON scan information and uploads it to build directory) should come before stage 2 (Updates selected Artifact with Snyk scan details) in the pipeline",
+            "options": {
+                "1" : "1",
+                "2" : "2"
+            }
+        },
+        {
             "name": "artifactoryServiceConnection",
             "type": "connectedService:jfrogPlatformService",
             "label": "Artifactory Service Connection",
             "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Select the Artifactory service connection."
-        },{
+            "helpMarkDown": "Select the Artifactory service connection.",
+            "visibleRule": "Stage=2"
+        },
+        {
+            "name": "InputType",
+            "type": "pickList",
+            "label": "InputType",
+            "helpMarkDown": "Select how you'd like the extension to determine which Artifacts to set properties on - UrlLIst allows you to Allows you to enter a list of Artifact URL's, and Build will have you enter build details and pull Artifacts from there",
+            "visibleRule": "Stage=2",
+            "options": {
+                "UrlList" : "UrlList",
+                "Build" : "Build"
+            }
+        }
+        ,{
             "name": "artifactUrls",
             "type": "string",
-            "label": "The URLs of the artifacts to set properties on",
+            "label": "artifactUrls",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "A list of artifact url's (excluding base URL) to set properties on. i.e (someartifacts/location,anotherartifacts/location)"
+            "helpMarkDown": "A list of artifact url's (excluding base URL) to set properties on. i.e (someartifacts/location,anotherartifacts/location)",
+            "visibleRule": "InputType=UrlList"
         },
         {
             "name": "delimiter",

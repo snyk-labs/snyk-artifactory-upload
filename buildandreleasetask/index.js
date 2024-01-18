@@ -40,6 +40,10 @@ function run() {
         let fileLocation = "";
         try {
             fileLocation = Utils.findReportFile();
+            if (fileLocation == null) {
+                console.log("Failed to find Snyk report file");
+                process.exit(1);
+            }
         }
         catch (err) {
             console.log("Error retrieving Snyk report file: " + err);
@@ -63,7 +67,7 @@ function run() {
         //add build details to data
         try {
             scanData = Utils.addPipelineInfo(scanData);
-            console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + scanData);
+            console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + JSON.stringify(scanData));
         }
         catch (err) {
             console.log("Error processing pipeline build data: " + err);

@@ -3,7 +3,9 @@ import * as types from './types'
 import tl = require('azure-pipelines-task-lib/task');
 import path = require('path');
 
-
+export function encodeSpaces(inputString: string): string {
+  return inputString.replace(/ /g, "%20");
+}
 export function findReportFile(): string | null {
   const givenDate = new Date()
   const directory : any = tl.getVariable('Agent.TempDirectory');
@@ -53,7 +55,7 @@ export async function readFileContents(filePath: string): Promise<object | null>
 export function processCode(codeOutput: any): types.CodeProperties {
 
     let scanProperties: types.CodeProperties = {
-        snyk_sast_scan_status: 'Error',
+        snyk_sast_scan_status: 'Complete',
         snyk_sast_findings_present: false,
         snyk_sast_highest_severity_level: 'None',
         snyk_sast_high_severity_count: 0,

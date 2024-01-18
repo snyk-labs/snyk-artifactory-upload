@@ -10,6 +10,10 @@ async function run() {
   let fileLocation: string | null = ""
   try{
     fileLocation = Utils.findReportFile()
+    if (fileLocation == null){
+      console.log("Failed to find Snyk report file")
+      process.exit(1)
+    }
   }catch (err) {
     console.log("Error retrieving Snyk report file: " + err)
     process.exit(1)

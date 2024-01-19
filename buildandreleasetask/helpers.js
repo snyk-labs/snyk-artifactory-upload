@@ -12,14 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPipelineInfo = exports.processCode = exports.readFileContents = exports.findReportFile = exports.encodeSpaces = void 0;
+exports.addPipelineInfo = exports.processCode = exports.readFileContents = exports.findReportFile = exports.encodeUrl = void 0;
 const fs_1 = __importDefault(require("fs")); // Import the Node.js file system module
 const tl = require("azure-pipelines-task-lib/task");
 const path = require("path");
-function encodeSpaces(inputString) {
-    return inputString.replace(/ /g, "%20");
+function encodeUrl(subdirectory) {
+    return subdirectory
+        .split('')
+        .map(char => (char === '/' ? char : encodeURIComponent(char)))
+        .join('');
 }
-exports.encodeSpaces = encodeSpaces;
+exports.encodeUrl = encodeUrl;
 function findReportFile() {
     const givenDate = new Date();
     const directory = tl.getVariable('Agent.TempDirectory');

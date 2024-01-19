@@ -32,33 +32,28 @@ export function setProperties(properties: any): void {
   };
 
   //add properties to each artifact
+
   for (let artifactUrlShort of artifactUrls) {
-    try {
       artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
 
       const artifactUrl = `${baseUrl}artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
 
-      const queryParams = Object.keys(properties).map(prop => `${prop}=12${properties[prop]}`);
-      const axiosConfig = {
-        params: { properties: queryParams },
-        headers: headers,
-      };
-
-      const response = axios.put(artifactUrl, null, axiosConfig);
-
-    } catch (error: any) {
-      console.error(`Error adding properties to artifact ${artifactUrlShort}. Error shown below:`);
-
-      if (error.response) {
-        console.error(error.response.data);
-      } else {
-        console.error(error.message);
-      }
-
-      // Handle errors here
-      process.exit(1); // Exiting with a non-zero code indicating an error
-  }
-        // Handle the response here
-        console.log("Successfully added properties to artifact: " + artifactUrlShort);
+      Object.keys(properties).forEach((prop) => {
+        const queryParams = {
+            "properties": [prop] + '=12' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
+        };
+        axios.put(artifactUrl, null, {
+            params: queryParams,
+            headers: headers,
+        })
+            .then(response => {
+            // Handle the response here
+        })
+            .catch(error => {
+            console.log('Error while attempting to add property to artifact: response', error.response.data);
+            // Handle errors here
+            process.exit(1); // Exiting with a non-zero code indicating an error
+        });
+    });
   }
 }

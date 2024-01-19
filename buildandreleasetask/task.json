@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 39
+        "Patch": 54
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [
@@ -42,8 +42,8 @@
                 "UrlList" : "UrlList",
                 "Build" : "Build"
             }
-        }
-        ,{
+        },
+        {
             "name": "artifactUrls",
             "type": "string",
             "label": "artifactUrls",
@@ -58,7 +58,35 @@
             "label": "A char to split the artifact urls with",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "A char to split the artifact urls with"
+            "helpMarkDown": "A char to split the artifact urls with",
+            "visibleRule": "InputType=UrlList"
+        },
+        {
+            "name": "BuildName",
+            "type": "string",
+            "label": "BuildName",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Name of build from which to pull Artifacts",
+            "visibleRule": "InputType=Build"
+        },
+        {
+            "name": "BuildNumber",
+            "type": "string",
+            "label": "BuildNumber",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The build number to search by, can be LATEST for the latest build number",
+            "visibleRule": "InputType=Build"
+        },
+        {
+            "name": "BuildStatus",
+            "type": "string",
+            "label": "BuildStatus",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Optionally search for the latest build status (e.g: Released)",
+            "visibleRule": "InputType=Build"
         }
     ],
     "execution": {

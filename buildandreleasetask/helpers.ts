@@ -3,8 +3,11 @@ import * as types from './types'
 import tl = require('azure-pipelines-task-lib/task');
 import path = require('path');
 
-export function encodeSpaces(inputString: string): string {
-  return inputString.replace(/ /g, "%20");
+export function encodeUrl(subdirectory: string): string {
+  return subdirectory
+    .split('')
+    .map(char => (char === '/' ? char : encodeURIComponent(char)))
+    .join('');
 }
 export function findReportFile(): string | null {
   const givenDate = new Date()

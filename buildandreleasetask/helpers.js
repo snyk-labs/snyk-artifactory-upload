@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPipelineInfo = exports.processCode = exports.readFileContents = exports.findReportFile = exports.encodeUrl = void 0;
+exports.addPipelineInfo = exports.processCode = exports.readFileContents = exports.findLocalReportFile = exports.encodeUrl = void 0;
 const fs_1 = __importDefault(require("fs")); // Import the Node.js file system module
 const tl = require("azure-pipelines-task-lib/task");
 const path = require("path");
@@ -23,7 +23,7 @@ function encodeUrl(subdirectory) {
         .join('');
 }
 exports.encodeUrl = encodeUrl;
-function findReportFile() {
+function findLocalReportFile() {
     const givenDate = new Date();
     const directory = tl.getVariable('Agent.TempDirectory');
     const filesInDirectory = fs_1.default.readdirSync(directory);
@@ -45,7 +45,7 @@ function findReportFile() {
     }
     return null; // No suitable file found
 }
-exports.findReportFile = findReportFile;
+exports.findLocalReportFile = findLocalReportFile;
 function readFileContents(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {

@@ -40,7 +40,7 @@ export function setProperties(properties: any): void {
 
       Object.keys(properties).forEach((prop) => {
         const queryParams = {
-            "properties": [prop] + '=12' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
+            "properties": [prop] + '=' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
         };
         axios.put(artifactUrl, null, {
             params: queryParams,

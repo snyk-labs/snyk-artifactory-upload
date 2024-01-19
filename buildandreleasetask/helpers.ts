@@ -9,7 +9,8 @@ export function encodeUrl(subdirectory: string): string {
     .map(char => (char === '/' ? char : encodeURIComponent(char)))
     .join('');
 }
-export function findReportFile(): string | null {
+
+export function findLocalReportFile(): string | null {
   const givenDate = new Date()
   const directory : any = tl.getVariable('Agent.TempDirectory');
   const filesInDirectory = fs.readdirSync(directory);
@@ -22,6 +23,7 @@ export function findReportFile(): string | null {
       if (!isNaN(fileDate.getTime())) {
         const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
         const differenceInMilliseconds = Math.abs(givenDate.getTime() - fileDate.getTime());
+        
 
         if (true) {
           const filePath = path.join(directory, file)

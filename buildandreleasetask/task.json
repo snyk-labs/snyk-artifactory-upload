@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 54
+        "Patch": 70
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [
@@ -22,7 +22,8 @@
             "options": {
                 "1" : "1",
                 "2" : "2"
-            }
+            },
+            "required": true
         },
         {
             "name": "artifactoryServiceConnection",
@@ -30,8 +31,23 @@
             "label": "Artifactory Service Connection",
             "defaultValue": "",
             "helpMarkDown": "Select the Artifactory service connection.",
-            "visibleRule": "Stage=2"
+            "visibleRule": "Stage=2",
+            "required": true
         },
+        {
+            "name": "downloadOption",
+            "type": "pickList",
+            "label": "downloadOption",
+            "defaultValue": "",
+            "helpMarkDown": "decide how you'd like to get the snyk scan details, local will pull the snyk scan from the local agent, artifact will pull from the artifact created by stage 1 of this tool",
+            "visibleRule": "Stage=2",
+            "options": {
+                "local" : "local",
+                "artifact" : "artifact"
+            },
+            "required": true
+        },
+
         {
             "name": "InputType",
             "type": "pickList",
@@ -58,7 +74,7 @@
             "label": "A char to split the artifact urls with",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "A char to split the artifact urls with",
+            "helpMarkDown": "A optional char to split the artifact urls with ",
             "visibleRule": "InputType=UrlList"
         },
         {
@@ -66,7 +82,7 @@
             "type": "string",
             "label": "BuildName",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "helpMarkDown": "Name of build from which to pull Artifacts",
             "visibleRule": "InputType=Build"
         },
@@ -75,7 +91,7 @@
             "type": "string",
             "label": "BuildNumber",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "helpMarkDown": "The build number to search by, can be LATEST for the latest build number",
             "visibleRule": "InputType=Build"
         },

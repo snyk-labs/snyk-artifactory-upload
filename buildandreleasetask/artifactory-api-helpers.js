@@ -62,7 +62,7 @@ function setProperties(properties) {
         const artifactUrl = `${baseUrl}artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
         Object.keys(properties).forEach((prop) => {
             const queryParams = {
-                "properties": [prop] + '=12' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
+                "properties": [prop] + '=' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
             };
             axios_1.default.put(artifactUrl, null, {
                 params: queryParams,

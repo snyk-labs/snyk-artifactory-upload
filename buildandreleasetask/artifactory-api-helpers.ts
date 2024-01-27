@@ -1,11 +1,12 @@
 import tl = require('azure-pipelines-task-lib/task');
 import axios from 'axios';
 import * as Utils from './helpers'
+import { json } from 'stream/consumers';
 
 
 
 export function setProperties(properties: any): void {
-  
+  const inputType = tl.getInput("InputType", true)?.toLowerCase()
   // get username/password details from service connection
   const serviceConnectionId: any = tl.getInput('artifactoryServiceConnection', true);
   const auth = tl.getEndpointAuthorization(serviceConnectionId, false);
@@ -22,17 +23,42 @@ export function setProperties(properties: any): void {
   }
   const baseUrl = tl.getEndpointUrl(serviceConnectionId, true);
 
-  //Retrieve artifact URLs
-  const delimiter: any = tl.getInput('delimiter', false) || ','
-  const artifactUrls: any = tl.getInput('artifactUrls', true)?.split(delimiter);
   //set API headers
   const headers = {
     Authorization: `${authType} ${authToken}`,
     'Content-Type': 'application/json', // Set content type based on your requirements
   };
+  //Retrieve artifact URLs
+  let artifactUrls: any = []
+  console.log(inputType)
+  if (inputType == "urllist"){
+    const delimiter: any = tl.getInput('delimiter', false) || ','
+    artifactUrls = tl.getInput('artifactUrls', true)?.split(delimiter);
+  }else if (inputType == "build"){
+
+    const buildName = tl.getInput('BuildName', true)
+    const buildNumber = tl.getInput('BuildNumber', true)
+    // tl.getInput('BuildStatus', false) ? {"buildStatus":tl.getInput('BuildStatus', false)
+    const searchBody = {
+      "buildName": buildName,
+      "buildNumber": buildNumber,
+     }
+
+  console.log("search body" + JSON.stringify(searchBody))
+  const searchUrl = `${baseUrl}/api/search/buildArtifacts`
+  axios.post(searchUrl, JSON.stringify(searchBody), {
+    headers: headers,
+  })
+    .then((response) => {
+    console.log('Response from Artifactory search builds API:', response.data);
+  })
+  .catch((error) => {
+    console.error('Error from Artifactory search builds API:', error.response ? error.response.data : error.message);
+  });
+    
+  }
 
   //add properties to each artifact
-
   for (let artifactUrlShort of artifactUrls) {
       artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
 

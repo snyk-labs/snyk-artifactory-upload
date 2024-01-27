@@ -31,7 +31,8 @@ const tl = require("azure-pipelines-task-lib/task");
 const axios_1 = __importDefault(require("axios"));
 const Utils = __importStar(require("./helpers"));
 function setProperties(properties) {
-    var _a;
+    var _a, _b;
+    const inputType = (_a = tl.getInput("InputType", true)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
     // get username/password details from service connection
     const serviceConnectionId = tl.getInput('artifactoryServiceConnection', true);
     const auth = tl.getEndpointAuthorization(serviceConnectionId, false);
@@ -48,14 +49,38 @@ function setProperties(properties) {
         authType = 'Bearer';
     }
     const baseUrl = tl.getEndpointUrl(serviceConnectionId, true);
-    //Retrieve artifact URLs
-    const delimiter = tl.getInput('delimiter', false) || ',';
-    const artifactUrls = (_a = tl.getInput('artifactUrls', true)) === null || _a === void 0 ? void 0 : _a.split(delimiter);
     //set API headers
     const headers = {
         Authorization: `${authType} ${authToken}`,
         'Content-Type': 'application/json', // Set content type based on your requirements
     };
+    //Retrieve artifact URLs
+    let artifactUrls = [];
+    console.log(inputType);
+    if (inputType == "urllist") {
+        const delimiter = tl.getInput('delimiter', false) || ',';
+        artifactUrls = (_b = tl.getInput('artifactUrls', true)) === null || _b === void 0 ? void 0 : _b.split(delimiter);
+    }
+    else if (inputType == "build") {
+        const buildName = tl.getInput('BuildName', true);
+        const buildNumber = tl.getInput('BuildNumber', true);
+        // tl.getInput('BuildStatus', false) ? {"buildStatus":tl.getInput('BuildStatus', false)
+        const searchBody = {
+            "buildName": buildName,
+            "buildNumber": buildNumber,
+        };
+        console.log("search body" + JSON.stringify(searchBody));
+        const searchUrl = `${baseUrl}/api/search/buildArtifacts`;
+        axios_1.default.post(searchUrl, JSON.stringify(searchBody), {
+            headers: headers,
+        })
+            .then((response) => {
+            console.log('Response from Artifactory search builds API:', response.data);
+        })
+            .catch((error) => {
+            console.error('Error from Artifactory search builds API:', error.response ? error.response.data : error.message);
+        });
+    }
     //add properties to each artifact
     for (let artifactUrlShort of artifactUrls) {
         artifactUrlShort = Utils.encodeUrl(artifactUrlShort);

@@ -10,50 +10,43 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 70
+        "Patch": 89
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [
         {
-            "name": "Stage",
+            "name": "Operation",
             "type": "pickList",
-            "label": "Stage",
-            "helpMarkDown": "Stage determines the function of the extension, stage 1 (Takes Snyk JSON scan information and uploads it to build directory) should come before stage 2 (Updates selected Artifact with Snyk scan details) in the pipeline",
+            "label": "Operation",
+            "helpMarkDown": "Operation determines the function of the extension, copy (Takes Snyk JSON scan information and uploads it to build directory) should come before process (Updates selected Artifact with Snyk scan details) in the pipeline",
             "options": {
-                "1" : "1",
-                "2" : "2"
+                "Copy" : "Copy",
+                "Process" : "Process"
             },
+            "required": true
+        },
+        {
+            "name": "SnykDirectory",
+            "type": "string",
+            "label": "SnykDirectory",
+            "helpMarkDown": "This determines the location where the Snyk report file will be copied and processed",
             "required": true
         },
         {
             "name": "artifactoryServiceConnection",
-            "type": "connectedService:jfrogPlatformService",
+            "type": "connectedService:jfrogArtifactoryService",
             "label": "Artifactory Service Connection",
             "defaultValue": "",
             "helpMarkDown": "Select the Artifactory service connection.",
-            "visibleRule": "Stage=2",
+            "visibleRule": "Operation=Process",
             "required": true
         },
-        {
-            "name": "downloadOption",
-            "type": "pickList",
-            "label": "downloadOption",
-            "defaultValue": "",
-            "helpMarkDown": "decide how you'd like to get the snyk scan details, local will pull the snyk scan from the local agent, artifact will pull from the artifact created by stage 1 of this tool",
-            "visibleRule": "Stage=2",
-            "options": {
-                "local" : "local",
-                "artifact" : "artifact"
-            },
-            "required": true
-        },
-
         {
             "name": "InputType",
             "type": "pickList",
             "label": "InputType",
             "helpMarkDown": "Select how you'd like the extension to determine which Artifacts to set properties on - UrlLIst allows you to Allows you to enter a list of Artifact URL's, and Build will have you enter build details and pull Artifacts from there",
-            "visibleRule": "Stage=2",
+            "visibleRule": "Operation=Process",
             "options": {
                 "UrlList" : "UrlList",
                 "Build" : "Build"

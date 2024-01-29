@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 89
+        "Patch": 90
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [
@@ -86,6 +86,15 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "The build number to search by, can be LATEST for the latest build number",
+            "visibleRule": "InputType=Build"
+        },
+        {
+            "name": "ProjectName",
+            "type": "string",
+            "label": "ProjectName",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The project name to search by",
             "visibleRule": "InputType=Build"
         },
         {

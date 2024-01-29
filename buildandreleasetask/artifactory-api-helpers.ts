@@ -38,11 +38,17 @@ export function setProperties(properties: any): void {
 
     const buildName = tl.getInput('BuildName', true)
     const buildNumber = tl.getInput('BuildNumber', true)
+    const projectName = tl.getInput('ProjectName', true)
+    const BuildStatus = tl.getInput('BuildStatus', true)
+    console.log("Build status is " + BuildStatus)
     // tl.getInput('BuildStatus', false) ? {"buildStatus":tl.getInput('BuildStatus', false)
     const searchBody = {
       "buildName": buildName,
       "buildNumber": buildNumber,
+      "projectName" : projectName,
+      ...(BuildStatus !== null && { myProperty: BuildStatus }),
      }
+  
 
   console.log("search body" + JSON.stringify(searchBody))
   const searchUrl = `${baseUrl}/api/search/buildArtifacts`
@@ -50,7 +56,11 @@ export function setProperties(properties: any): void {
     headers: headers,
   })
     .then((response) => {
-    console.log('Response from Artifactory search builds API:', response.data);
+    artifactUrls = response.data.results.map((obj: any) => {
+      const { url } = obj;
+      const trimmedUrl = url.replace(`${baseUrl}/artifactory/api/storage/`, "");
+      return trimmedUrl;
+    });
   })
   .catch((error) => {
     console.error('Error from Artifactory search builds API:', error.response ? error.response.data : error.message);
@@ -62,7 +72,7 @@ export function setProperties(properties: any): void {
   for (let artifactUrlShort of artifactUrls) {
       artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
 
-      const artifactUrl = `${baseUrl}artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
+      const artifactUrl = `${baseUrl}/artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
 
       Object.keys(properties).forEach((prop) => {
         const queryParams = {

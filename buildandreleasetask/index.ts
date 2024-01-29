@@ -55,6 +55,7 @@ async function run() {
     
   }else if (operation == "Process"){
     console.log("Reading snyk data data from: " + snykFilePath)
+    
     let scanData = fs.readFileSync(`${snykFilePath}SnykReport.json`, 'utf-8');
     scanData = JSON.parse(scanData)
     console.log(scanData)

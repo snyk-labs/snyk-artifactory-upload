@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 90
+        "Patch": 999
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [
@@ -93,7 +93,7 @@
             "type": "string",
             "label": "ProjectName",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "helpMarkDown": "The project name to search by",
             "visibleRule": "InputType=Build"
         },

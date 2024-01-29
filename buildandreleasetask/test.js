@@ -7,7 +7,7 @@ const arrayOfObjects = [
   // Add more objects as needed
 ];
 
-const  = arrayOfObjects.map((obj) => {
+const  arrayOfUrls = arrayOfObjects.map((obj) => {
   const { url } = obj;
   const trimmedUrl = url.replace(`${baseUrl}/artifactory/api/storage/`, "");
   return trimmedUrl;

@@ -41,8 +41,18 @@ const Utils = __importStar(require("./helpers"));
 const Artifactory = require('./artifactory-api-helpers');
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        //determine whether to use forward or backslash depending on OS
+        const os = process.env.AGENT_OS;
+        console.log("agent os is" + os);
+        let slash;
+        if (os === 'Windows_NT') {
+            slash = '\\'; // Backslash for Windows
+        }
+        else {
+            slash = '/'; // Forward slash for Linux and macOS
+        }
         const operation = tl.getInput('Operation', true);
-        const snykFilePath = tl.getInput('SnykDirectory');
+        const snykFilePath = tl.getInput('SnykDirectory') + slash;
         if (operation == "Copy") {
             //get file location from temp directory
             let fileLocation = "";

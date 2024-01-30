@@ -30,7 +30,6 @@ export function setProperties(properties: any): void {
   };
   //Retrieve artifact URLs
   let artifactUrls: any = []
-  console.log(inputType)
   if (inputType == "urllist"){
     const delimiter: any = tl.getInput('delimiter', false) || ','
     artifactUrls = tl.getInput('artifactUrls', true)?.split(delimiter);
@@ -38,37 +37,30 @@ export function setProperties(properties: any): void {
 
     const buildName = tl.getInput('BuildName', true)
     const buildNumber = tl.getInput('BuildNumber', true)
-    const projectName = tl.getInput('ProjectName', true)
+    const projectName = tl.getInput('ProjectKey', true)
     const BuildStatus = tl.getInput('BuildStatus', false)
-    // tl.getInput('BuildStatus', false) ? {"buildStatus":tl.getInput('BuildStatus', false)
     const searchBody = {
       "buildName": buildName,
       "buildNumber": buildNumber,
       "project" : projectName,
       ...(BuildStatus !== null && { myProperty: BuildStatus }),
-     }
+    }
 
-  
-
-  console.log("search body" + JSON.stringify(searchBody))
   const searchUrl = `${baseUrl}/api/search/buildArtifacts`
   axios.post(searchUrl, JSON.stringify(searchBody), {
     headers: headers,
   })
     .then((response) => {
+      console.log("Data received from build search API: " + JSON.stringify(response.data))
       artifactUrls = response.data.results.map((obj: any) => {
         const { downloadUri } = obj;
-        console.log("download URI" + downloadUri)
         const trimmedUrl = downloadUri.replace(`${baseUrl}/`, "");
-        console.log("trimmed URL is" + trimmedUrl)
         return trimmedUrl;
       }
     );
 
-    console.log("urls are " + artifactUrls)
     for (let artifactUrlShort of artifactUrls) {
       artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
-      console.log(artifactUrlShort)
       const artifactUrl = `${baseUrl}/api/storage/${artifactUrlShort}`; // Construct the complete URL
       
       Object.keys(properties).forEach((prop) => {
@@ -80,25 +72,25 @@ export function setProperties(properties: any): void {
             headers: headers,
         })
             .then(response => {
-            console.log(response.data)
+            console.log(`Successfully set property '${prop}' on Artifact ${artifactUrlShort}`)
         })
             .catch(error => {
-            console.log('Error while attempting to add property to artifact: response', error.response.data);
+            console.log('Error while attempting to add property to Artifact: response', error.response.data);
             // Handle errors here
             process.exit(1); // Exiting with a non-zero code indicating an error
         });
     });
   }
-  })
+})
   .catch((error) => {
     console.error('Error from Artifactory search builds API:', error.response ? error.response.data : error.message);
+    process.exit(1)
   });
 }
 
   //add properties to each artifact
   for (let artifactUrlShort of artifactUrls) {
       artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
-      console.log(artifactUrlShort)
       const artifactUrl = `${baseUrl}/artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
       
       Object.keys(properties).forEach((prop) => {
@@ -110,10 +102,10 @@ export function setProperties(properties: any): void {
             headers: headers,
         })
             .then(response => {
-            console.log(response.data)
+            console.log(`Successfully set property '${prop}' on Artifact ${artifactUrlShort}`)
         })
             .catch(error => {
-            console.log('Error while attempting to add property to artifact: response', error.response.data);
+            console.log('Error while attempting to add property to Artifact: response', error.response.data);
             // Handle errors here
             process.exit(1); // Exiting with a non-zero code indicating an error
         });

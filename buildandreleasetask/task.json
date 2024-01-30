@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 999
+        "Patch": 99992
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [
@@ -21,7 +21,8 @@
             "helpMarkDown": "Operation determines the function of the extension, copy (Takes Snyk JSON scan information and uploads it to build directory) should come before process (Updates selected Artifact with Snyk scan details) in the pipeline",
             "options": {
                 "Copy" : "Copy",
-                "Process" : "Process"
+                "Process" : "Process",
+                "CopyAndProcess" : "CopyAndProcess"
             },
             "required": true
         },
@@ -38,7 +39,7 @@
             "label": "Artifactory Service Connection",
             "defaultValue": "",
             "helpMarkDown": "Select the Artifactory service connection.",
-            "visibleRule": "Operation=Process",
+            "visibleRule": "Operation = Process || Operation = CopyAndProcess",
             "required": true
         },
         {
@@ -46,7 +47,7 @@
             "type": "pickList",
             "label": "InputType",
             "helpMarkDown": "Select how you'd like the extension to determine which Artifacts to set properties on - UrlLIst allows you to Allows you to enter a list of Artifact URL's, and Build will have you enter build details and pull Artifacts from there",
-            "visibleRule": "Operation=Process",
+            "visibleRule": "Operation = Process || Operation = CopyAndProcess",
             "options": {
                 "UrlList" : "UrlList",
                 "Build" : "Build"
@@ -74,7 +75,7 @@
             "name": "BuildName",
             "type": "string",
             "label": "BuildName",
-            "defaultValue": "",
+            "defaultValue": "$(Build.DefinitionName)",
             "required": true,
             "helpMarkDown": "Name of build from which to pull Artifacts",
             "visibleRule": "InputType=Build"
@@ -83,16 +84,16 @@
             "name": "BuildNumber",
             "type": "string",
             "label": "BuildNumber",
-            "defaultValue": "",
+            "defaultValue": "$(Build.BuildNumber)",
             "required": true,
             "helpMarkDown": "The build number to search by, can be LATEST for the latest build number",
             "visibleRule": "InputType=Build"
         },
         {
-            "name": "ProjectName",
+            "name": "ProjectKey",
             "type": "string",
-            "label": "ProjectName",
-            "defaultValue": "",
+            "label": "ProjectKey",
+            "defaultValue": "$(ProjKey)",
             "required": true,
             "helpMarkDown": "The project name to search by",
             "visibleRule": "InputType=Build"

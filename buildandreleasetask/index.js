@@ -43,7 +43,6 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         //determine whether to use forward or backslash depending on OS
         const os = process.env.AGENT_OS;
-        console.log("agent os is" + os);
         let slash;
         if (os === 'Windows_NT') {
             slash = '\\'; // Backslash for Windows
@@ -51,12 +50,14 @@ function run() {
         else {
             slash = '/'; // Forward slash for Linux and macOS
         }
+        //Get operation to be performed, can be copy, process or both
         const operation = tl.getInput('Operation', true);
         const snykFilePath = tl.getInput('SnykDirectory') + slash;
-        if (operation == "Copy") {
-            //get file location from temp directory
+        if (operation == "Copy" || operation == "CopyAndProcess") {
+            //get file location from file path directory
             let fileLocation = "";
             try {
+                console.log("Attempting to retrieve Snyk report file from location: " + snykFilePath);
                 fileLocation = Utils.findLocalReportFile();
                 if (fileLocation == null) {
                     console.log("Failed to find Snyk report file");
@@ -76,6 +77,7 @@ function run() {
                 }
                 catch (err) {
                     console.log("Error processing code results: " + err);
+                    process.exit(1);
                 }
             }
             else {
@@ -87,76 +89,36 @@ function run() {
                 const jsonFilePath = `${snykFilePath}SnykReport.json`;
                 tl.writeFile(jsonFilePath, JSON.stringify(scanData));
                 console.log(`Wrote Snyk vulnerability data to ${jsonFilePath} `);
-                //DEPRECATED, upload snyk report to azure artifact
-                // const artifactName = 'SnykReport';
-                // const artifactType = 'filepath'; 
-                // const artifactPath = jsonFilePath;
-                // tl.command('artifact.upload', { artifactname: artifactName, type: artifactType }, artifactPath);
             }
             catch (err) {
-                tl.setResult(tl.TaskResult.Failed, err.message);
+                console.error("Failed to upload Snyk report to path: " + snykFilePath);
+                console.log(err);
+                process.exit(1);
             }
         }
-        else if (operation == "Process") {
-            console.log("Reading snyk data data from: " + snykFilePath);
-            let scanData = fs_1.default.readFileSync(`${snykFilePath}SnykReport.json`, 'utf-8');
-            scanData = JSON.parse(scanData);
-            console.log(scanData);
-            // if (downloadOption == 'local'){
-            //   //get snyk report file
-            // let fileLocation: string | null = ""
-            // try{
-            //   fileLocation = Utils.findLocalReportFile()
-            //   if (fileLocation == null){
-            //     console.log("Failed to find Snyk report file")
-            //     process.exit(1)
-            //   }
-            // }catch (err) {
-            //   console.log("Error retrieving Snyk report file: " + err)
-            //   process.exit(1)
-            // }
-            // // if location of json code file is passed then proccess the data
-            // if (fileLocation) {
-            //   try{
-            //     let codeJson = await Utils.readFileContents(fileLocation); // Only call function if fileLocation is defined
-            //     scanData = Utils.processCode(codeJson)
-            //   }catch (err){
-            //     console.log("Error processing code results: " + err)
-            //   }
-            //   } else {
-            //     console.error('File location is undefined or empty.');
-            //     process.exit(1)
-            //   }
-            //   //add build details to data
-            //   try{
-            //     scanData = Utils.addPipelineInfo(scanData)
-            //     console.log("Sucessfully retrieved build and snyk properties, properties to be added are: " + JSON.stringify(scanData))
-            //   }catch (err){
-            //     console.log("Error processing pipeline build data: " + err)
-            //     process.exit(1)
-            //   }
-            // }else{
-            //   const pipelineWorkspace = tl.getVariable("Agent.BuildDirectory") || '';
-            //   const artifactRelativePath = 'SnykReport.json';
-            //   const artifactPath = path.join(pipelineWorkspace, artifactRelativePath);
-            //   try {
-            //     // Read the content of the downloaded artifact file
-            //     const artifactContent = fs.readFileSync(artifactPath, 'utf-8');
-            //     // Log the content to the console
-            //     console.log('Artifact Content:', artifactContent);
-            //     scanData = JSON.parse(artifactContent);
-            //   } catch (error: any) {
-            //     console.error('Error reading or logging artifact:', error.message);
-            //   }
-            // }
-            //set properties in artifactory
+        if (operation == "Process" || operation == "CopyAndProcess") {
+            //retrieve scan data
+            let scanData = {};
+            console.log("Proccesing Snyk data from: " + snykFilePath);
             try {
-                Artifactory.setProperties(scanData);
+                let scanData = fs_1.default.readFileSync(`${snykFilePath}SnykReport.json`, 'utf-8');
+                scanData = JSON.parse(scanData);
+                console.log("Successfully retrieved scan data: " + JSON.stringify(scanData));
+                //set properties in artifactory with scan data
+                try {
+                    Artifactory.setProperties(scanData);
+                }
+                catch (err) {
+                    console.log("Error setting properties on artifact: " + err);
+                    process.exit(1);
+                }
             }
             catch (err) {
-                console.log("Error setting properties on artifact: " + err);
+                console.error("Error while attempting to retrieve scan data: " + err);
+                process.exit(1);
             }
-        } //add error handling for no operation here TODO
+            //test
+        }
     });
 }
 run();

@@ -56,7 +56,6 @@ function setProperties(properties) {
     };
     //Retrieve artifact URLs
     let artifactUrls = [];
-    console.log(inputType);
     if (inputType == "urllist") {
         const delimiter = tl.getInput('delimiter', false) || ',';
         artifactUrls = (_b = tl.getInput('artifactUrls', true)) === null || _b === void 0 ? void 0 : _b.split(delimiter);
@@ -64,29 +63,29 @@ function setProperties(properties) {
     else if (inputType == "build") {
         const buildName = tl.getInput('BuildName', true);
         const buildNumber = tl.getInput('BuildNumber', true);
-        const projectName = tl.getInput('ProjectName', true);
+        const projectName = tl.getInput('ProjectKey', true);
         const BuildStatus = tl.getInput('BuildStatus', false);
-        // tl.getInput('BuildStatus', false) ? {"buildStatus":tl.getInput('BuildStatus', false)
         const searchBody = Object.assign({ "buildName": buildName, "buildNumber": buildNumber, "project": projectName }, (BuildStatus !== null && { myProperty: BuildStatus }));
-        console.log("search body" + JSON.stringify(searchBody));
         const searchUrl = `${baseUrl}/api/search/buildArtifacts`;
         axios_1.default.post(searchUrl, JSON.stringify(searchBody), {
             headers: headers,
         })
             .then((response) => {
+            console.log("Response from search API " + JSON.stringify(response.data));
             artifactUrls = response.data.results.map((obj) => {
+                console.log("Response from search API " + JSON.stringify(response.data));
                 const { downloadUri } = obj;
-                console.log("download URI" + downloadUri);
                 const trimmedUrl = downloadUri.replace(`${baseUrl}/`, "");
-                console.log("trimmed URL is" + trimmedUrl);
                 return trimmedUrl;
             });
-            console.log("urls are " + artifactUrls);
             for (let artifactUrlShort of artifactUrls) {
-                artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
                 console.log(artifactUrlShort);
+                artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
                 const artifactUrl = `${baseUrl}/api/storage/${artifactUrlShort}`; // Construct the complete URL
+                console.log("properties are:  " + JSON.stringify(properties));
                 Object.keys(properties).forEach((prop) => {
+                    console.log("Attempting to call api");
+                    console.log(prop);
                     const queryParams = {
                         "properties": [prop] + '=' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
                     };
@@ -95,10 +94,10 @@ function setProperties(properties) {
                         headers: headers,
                     })
                         .then(response => {
-                        console.log(response.data);
+                        console.log(JSON.stringify(response.data));
                     })
                         .catch(error => {
-                        console.log('Error while attempting to add property to artifact: response', error.response.data);
+                        console.log('Error while attempting to add property to Artifact: response', error.response.data);
                         // Handle errors here
                         process.exit(1); // Exiting with a non-zero code indicating an error
                     });
@@ -107,12 +106,12 @@ function setProperties(properties) {
         })
             .catch((error) => {
             console.error('Error from Artifactory search builds API:', error.response ? error.response.data : error.message);
+            process.exit(1);
         });
     }
     //add properties to each artifact
     for (let artifactUrlShort of artifactUrls) {
         artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
-        console.log(artifactUrlShort);
         const artifactUrl = `${baseUrl}/artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
         Object.keys(properties).forEach((prop) => {
             const queryParams = {
@@ -126,7 +125,7 @@ function setProperties(properties) {
                 console.log(response.data);
             })
                 .catch(error => {
-                console.log('Error while attempting to add property to artifact: response', error.response.data);
+                console.log('Error while attempting to add property to Artifact: response', error.response.data);
                 // Handle errors here
                 process.exit(1); // Exiting with a non-zero code indicating an error
             });

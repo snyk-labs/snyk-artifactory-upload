@@ -71,21 +71,16 @@ function setProperties(properties) {
             headers: headers,
         })
             .then((response) => {
-            console.log("Response from search API " + JSON.stringify(response.data));
+            console.log("Data received from build search API: " + JSON.stringify(response.data));
             artifactUrls = response.data.results.map((obj) => {
-                console.log("Response from search API " + JSON.stringify(response.data));
                 const { downloadUri } = obj;
                 const trimmedUrl = downloadUri.replace(`${baseUrl}/`, "");
                 return trimmedUrl;
             });
             for (let artifactUrlShort of artifactUrls) {
-                console.log(artifactUrlShort);
                 artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
                 const artifactUrl = `${baseUrl}/api/storage/${artifactUrlShort}`; // Construct the complete URL
-                console.log("properties are:  " + JSON.stringify(properties));
                 Object.keys(properties).forEach((prop) => {
-                    console.log("Attempting to call api");
-                    console.log(prop);
                     const queryParams = {
                         "properties": [prop] + '=' + properties[prop], // Assuming 'prop' and 'properties' are defined elsewhere
                     };
@@ -94,7 +89,7 @@ function setProperties(properties) {
                         headers: headers,
                     })
                         .then(response => {
-                        console.log(JSON.stringify(response.data));
+                        console.log(`Successfully set property '${prop}' on Artifact ${artifactUrlShort}`);
                     })
                         .catch(error => {
                         console.log('Error while attempting to add property to Artifact: response', error.response.data);
@@ -122,7 +117,7 @@ function setProperties(properties) {
                 headers: headers,
             })
                 .then(response => {
-                console.log(response.data);
+                console.log(`Successfully set property '${prop}' on Artifact ${artifactUrlShort}`);
             })
                 .catch(error => {
                 console.log('Error while attempting to add property to Artifact: response', error.response.data);

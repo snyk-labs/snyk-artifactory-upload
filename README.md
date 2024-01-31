@@ -39,6 +39,7 @@ This Azure DevOps task provides functionality to take Snyk vulnerability report 
     BuildName: 'somebuild'
     BuildNumber: 'somebuildNumber'
     ProjectName: 'someProjectName'
+```
 
 ### Snyk Scan Data Properties
 

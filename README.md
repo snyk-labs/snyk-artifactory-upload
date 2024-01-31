@@ -34,7 +34,7 @@ This Azure DevOps task provides functionality to take Snyk vulnerability report 
     inputs:
     Operation: 'CopyAndProcess'
     SnykDirectory: '$(Pipeline.Workspace)'
-    artifactoryServiceConnection: 'Some artifact'
+    artifactoryServiceConnection: 'someserviceconnection'
     InputType: 'Build'
     BuildName: 'somebuild'
     BuildNumber: 'somebuildNumber'

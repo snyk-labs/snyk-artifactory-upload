@@ -1,0 +1,28 @@
+##vso[task.debug]agent.TempDirectory=undefined
+##vso[task.debug]agent.workFolder=undefined
+##vso[task.debug]loading inputs and endpoints
+##vso[task.debug]loading INPUT_SAMPLESTRING
+##vso[task.debug]loaded 1
+##vso[task.debug]Agent.ProxyUrl=undefined
+##vso[task.debug]Agent.CAInfo=undefined
+##vso[task.debug]Agent.ClientCert=undefined
+##vso[task.debug]Agent.SkipCertValidation=undefined
+##vso[task.debug]task result: Failed
+##vso[task.issue type=error;]Unhandled: Unexpected token function
+##vso[task.complete result=Failed;]Unhandled: Unexpected token function
+##vso[task.issue type=error;]/Users/olegshprengel/Desktop/artifactory-azure-extension/index.js:4%0Aasync function run() {%0A      ^^^^^^^^%0A%0ASyntaxError: Unexpected token function%0A    at createScript (vm.js:56:10)%0A    at Object.runInThisContext (vm.js:97:10)%0A    at Module._compile (module.js:549:28)%0A    at Object.Module._extensions..js (module.js:586:10)%0A    at Module.load (module.js:494:32)%0A    at tryModuleLoad (module.js:453:12)%0A    at Module._load (module.js:445:3)%0A    at Function._hookedLoader [as _load] (/Users/olegshprengel/Desktop/artifactory-azure-extension/node_modules/azure-pipelines-task-lib/lib-mocker.js:43:12)%0A    at Module.require (module.js:504:17)%0A    at require (internal/module.js:20:19)
+
+##vso[task.debug]agent.TempDirectory=undefined
+##vso[task.debug]agent.workFolder=undefined
+##vso[task.debug]loading inputs and endpoints
+##vso[task.debug]loading INPUT_SAMPLESTRING
+##vso[task.debug]loaded 1
+##vso[task.debug]Agent.ProxyUrl=undefined
+##vso[task.debug]Agent.CAInfo=undefined
+##vso[task.debug]Agent.ClientCert=undefined
+##vso[task.debug]Agent.SkipCertValidation=undefined
+##vso[task.debug]task result: Failed
+##vso[task.issue type=error;]Unhandled: Unexpected token function
+##vso[task.complete result=Failed;]Unhandled: Unexpected token function
+##vso[task.issue type=error;]/Users/olegshprengel/Desktop/artifactory-azure-extension/index.js:4%0Aasync function run() {%0A      ^^^^^^^^%0A%0ASyntaxError: Unexpected token function%0A    at createScript (vm.js:56:10)%0A    at Object.runInThisContext (vm.js:97:10)%0A    at Module._compile (module.js:549:28)%0A    at Object.Module._extensions..js (module.js:586:10)%0A    at Module.load (module.js:494:32)%0A    at tryModuleLoad (module.js:453:12)%0A    at Module._load (module.js:445:3)%0A    at Function._hookedLoader [as _load] (/Users/olegshprengel/Desktop/artifactory-azure-extension/node_modules/azure-pipelines-task-lib/lib-mocker.js:43:12)%0A    at Module.require (module.js:504:17)%0A    at require (internal/module.js:20:19)
+

@@ -1,21 +1,21 @@
 {
     "manifestVersion": 1,
-    "id": "artifactory-upload",
+    "id": "snyk-artifactory-upload",
     "name": "Snyk Artifactory Upload",
-    "version": "1.0.54",
-    "publisher": "oleg-private-snyk",
+    "version": "1.0.0",
+    "publisher": "SnykProfessionalServices",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
-    "description": "Set's properties on artifactory artifacts with result of snky SAST scan",
+    "description": "Set's properties on Artifactory artifacts with result of Snyk SAST scan",
     "categories": [
         "Azure Pipelines"
     ],
     "files": [
         {
-            "path": "buildandreleasetask"
+            "path": "task"
         }
     ],
     "contributions": [
@@ -26,7 +26,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "buildandreleasetask"
+                "name": "task"
             }
         }
     ]

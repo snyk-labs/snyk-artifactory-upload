@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "40614d12-c808-435f-a2ea-181e09503ad4",
-    "name": "snyk-artifactory-azure-upload",
+    "name": "artifactory-azure-upload",
     "friendlyName": "snyk-artifactory-azure-upload",
     "description": "Set's properties on Artifactory artifacts with result of snyk SAST scan",
     "helpMarkDown": "",
@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 12
     },
     "instanceNameFormat": "Echo $(samplestring)",
     "inputs": [

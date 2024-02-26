@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "latest",
+    "axios": "^1.6.4",
+    "axios-retry": "^4.0.0",
     "azure-pipelines-task-lib": "^4.9.0",
     "bunyan": "^1.8.15"
   },

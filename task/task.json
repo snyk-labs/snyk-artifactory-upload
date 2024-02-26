@@ -10,14 +10,15 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 13
+        "Patch": 35
     },
-    "instanceNameFormat": "Echo $(samplestring)",
+    "instanceNameFormat": "Snyk Set Artifactory Properties",
     "inputs": [
         {
             "name": "Operation",
             "type": "pickList",
             "label": "Operation",
+            "defaultValue": "CopyAndProcess",
             "helpMarkDown": "Operation determines the function of the extension, copy (Takes Snyk JSON scan information and uploads it to build directory) should come before process (Updates selected Artifact with Snyk scan details) in the pipeline",
             "options": {
                 "Copy" : "Copy",
@@ -48,6 +49,7 @@
             "label": "InputType",
             "helpMarkDown": "Select how you'd like the extension to determine which Artifacts to set properties on - UrlLIst allows you to Allows you to enter a list of Artifact URL's, and Build will have you enter build details and pull Artifacts from there",
             "visibleRule": "Operation = Process || Operation = CopyAndProcess",
+            "defaultValue": "Build",
             "options": {
                 "UrlList" : "UrlList",
                 "Build" : "Build"
@@ -109,7 +111,7 @@
         }
     ],
     "execution": {
-        "Node10": {
+        "Node16": {
             "target": "index.js"
         }
     }

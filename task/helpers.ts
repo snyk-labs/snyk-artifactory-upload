@@ -51,7 +51,9 @@ export async function readFileContents(filePath: string): Promise<object | null>
         resolve(jsonObject); // Resolve the promise with the parsed JSON object
       } catch (parseError) {
         console.error('Error parsing JSON:', parseError);
+        console.log("Contents of Snyk JSON file: " + data)
         resolve(null); // Resolve with null if parsing fails
+        process.exit(1)
       }
     });
   });

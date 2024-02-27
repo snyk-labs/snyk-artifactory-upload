@@ -44,7 +44,7 @@ export function setProperties(properties: any): void {
   //add properties to each artifact
   for (let artifactUrlShort of artifactUrls) {
     artifactUrlShort = Utils.encodeUrl(artifactUrlShort);
-    const artifactUrl = `${baseUrl}/artifactory/api/storage/${artifactUrlShort}`; // Construct the complete URL
+    const artifactUrl = `${baseUrl}/api/storage/${artifactUrlShort}`; // Construct the complete URL
     
     Object.keys(properties).forEach((prop) => {
       const queryParams = {

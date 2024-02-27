@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "snyk-artifactory-upload",
     "name": "Snyk Artifactory Upload",
-    "version": "1.0.35",
+    "version": "1.0.36",
     "publisher": "SnykProfessionalServices",
     "icons": {
         "default": "images/extension-icon.png"

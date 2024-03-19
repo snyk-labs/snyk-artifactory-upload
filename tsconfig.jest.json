@@ -1,0 +1,6 @@
+{
+    "extends": "./task/tsconfig.json",
+    "compilerOptions": {
+        "jsx":"preserve"
+    }
+}

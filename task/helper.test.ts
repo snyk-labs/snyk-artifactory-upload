@@ -1,19 +1,22 @@
-import { readFileContents, encodeUrl } from '../task/helpers'
-
+import { readFileContents, encodeUrl, processCode } from '../task/helpers'
 
 test('Checking encodeUrl will encode : value', () => {
     expect(encodeUrl('scheme://prefix.domain:port/path/filename ')).toBe('scheme%3A//prefix.domain%3Aport/path/filename%20')
 })
 
-// test('Test for opening file location',async () => {
-//     expect(await readFileContents('/Users/roberthicks/Desktop/snyk-artifactory-upload/test/report-2024-03-15T22-07-06.json')).toHaveBeenCalledWith(expect.objectContaining({"vulnerabilities": [{"id": expect.any(String),"title": expect.any(String),"CVSSv3": expect.any(String)}], 
-//     }))
-// })
-
-
-it('Test readfile for correct location and return object', async () => {
-    const consoleSpy = jest.spyOn(global.console, 'error').mockImplementation(() => { });
-    await readFileContents('/Users/roberthicks/Desktop/snyk-artifactory-upload/test/report-2024-03-15T22-07-06.json')
-    consoleSpy.mockRestore();
-    expect(consoleSpy).toBeDefined()
+test('Test readfile for correct location and return object', () => {
+    return readFileContents('./test/report-2024-03-15T22-07-06.json').then(data => {
+        expect(data).toEqual(expect.objectContaining({
+            "dependencyCount": 384,
+            "displayTargetFile": "package-lock.json",
+            "filesystemPolicy": true
+        }))
+    });
 });
+
+const codeIssues = { "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json", "version": "2.1.0", "runs": [{ "tool": {}, "results": [{ "ruleId": "javascript/HardcodedNonCryptoSecret", "ruleIndex": 0, "level": "error", "message": { "text": "Avoid hardcoding values that are meant to be secret. Found a hardcoded string used in here.", "markdown": "Avoid hardcoding values that are meant to be secret. Found {0} used in {1}.", "arguments": ["[a hardcoded string](0)", "[here](1)"] }, "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "app.js", "uriBaseId": "%SRCROOT%" }, "region": { "startLine": 74, "endLine": 74, "startColumn": 5, "endColumn": 10 } } }], "fingerprints": { "0": "a244acfe383de501ab67d46263a13b67af3e6eb8ef8f44f79cb9ff6f1ea8a851", "1": "46b7c801.8e456e36.642d3d87.72a8f743.a46de81d.5fce695c.fee35010.89d75565.46b7c801.8e456e36.642d3d87.72a8f743.a46de81d.5fce695c.fee35010.89d75565" }, "codeFlows": [{ "threadFlows": [{ "locations": [{ "location": { "id": 0, "physicalLocation": { "artifactLocation": { "uri": "app.js", "uriBaseId": "%SRCROOT%" }, "region": { "startLine": 74, "endLine": 74, "startColumn": 13, "endColumn": 67 } } } }, { "location": { "id": 1, "physicalLocation": { "artifactLocation": { "uri": "app.js", "uriBaseId": "%SRCROOT%" }, "region": { "startLine": 74, "endLine": 74, "startColumn": 5, "endColumn": 10 } } } }] }] }], "properties": { "priorityScore": 810, "priorityScoreFactors": [{ "label": true, "type": "hotFileSource" }, { "label": true, "type": "fixExamples" }], "isAutofixable": false } }, { "ruleId": "javascript/UseCsurfForExpress", "ruleIndex": 1, "level": "warning", "message": { "text": "CSRF protection is disabled for your Express app. This allows the attackers to execute requests on a user's behalf.", "markdown": "CSRF protection is disabled for your {0}. This allows the attackers to execute requests on a user's behalf.", "arguments": ["[Express app](0)"] }, "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "app.js", "uriBaseId": "%SRCROOT%" }, "region": { "startLine": 31, "endLine": 31, "startColumn": 11, "endColumn": 18 } } }], "fingerprints": { "0": "e9efef11df29effdf12993c800f24b845901a11c4b123d7115a075c201c5acc2", "1": "ae77ea27.4773f344.607187b5.d7919eeb.a1fb1152.5fce695c.fee35010.89d75565.630e4ed1.4773f344.aa4dda5f.d7919eeb.f30fb760.49b28873.85bdc101.83642794" }, "codeFlows": [{ "threadFlows": [{ "locations": [{ "location": { "id": 0, "physicalLocation": { "artifactLocation": { "uri": "app.js", "uriBaseId": "%SRCROOT%" }, "region": { "startLine": 31, "endLine": 31, "startColumn": 11, "endColumn": 18 } } } }] }] }], "properties": { "priorityScore": 560, "priorityScoreFactors": [{ "label": true, "type": "hotFileSource" }, { "label": true, "type": "fixExamples" }], "isAutofixable": false } }], "properties": { "coverage": [{ "isSupported": true, "lang": "JavaScript", "files": 5, "type": "SUPPORTED" }, { "isSupported": true, "lang": "Python", "files": 12, "type": "SUPPORTED" }, { "isSupported": true, "lang": "EJS", "files": 4, "type": "SUPPORTED" }, { "isSupported": true, "lang": "HTML", "files": 1, "type": "SUPPORTED" }, { "isSupported": true, "lang": "XML", "files": 4, "type": "SUPPORTED" }] } }] }
+const expectedResult = { "snyk_sast_findings_present": false, "snyk_sast_high_severity_count": 0, "snyk_sast_highest_severity_level": "None", "snyk_sast_low_severity_count": 0, "snyk_sast_medium_severity_count": 0, "snyk_sast_project_link": "None", "snyk_sast_scan_status": "Complete" }
+
+it('Testing processCode to return code object',  ()=> {
+    expect(processCode(codeIssues).toString()).toBe(expectedResult.toString())
+})

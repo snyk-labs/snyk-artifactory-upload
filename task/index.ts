@@ -1,5 +1,5 @@
 import tl = require('azure-pipelines-task-lib/task');
-import fs from 'fs'; // Import the Node.js file system module
+import * as fs from 'fs';
 import * as Utils from './helpers'
 import * as types from './types'
 const Artifactory = require('./artifactory-api-helpers');

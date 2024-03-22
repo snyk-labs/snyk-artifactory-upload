@@ -1,4 +1,4 @@
-import fs from 'fs'; // Import the Node.js file system module
+import * as fs from 'fs';
 import * as types from './types'
 import tl = require('azure-pipelines-task-lib/task');
 import path = require('path');

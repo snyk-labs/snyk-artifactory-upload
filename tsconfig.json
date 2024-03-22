@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "es6",                   // Target latest ECMAScript features for compatibility
+      "module": "commonjs",              // Use CommonJS module resolution
+      "strict": true,                    // Enable all strict type-checking options
+      "esModuleInterop": true           // Enables compatibility with default import syntax for commonjs modules
+    },
+    "include": [
+      "task/**/*"                         // Include all files in the src folder
+    ],
+    "exclude": [
+      "node_modules",                    // Exclude the node_modules directory
+      "**/*.test.ts"                     // Exclude test files
+    ]
+  }
+  
